@@ -35,10 +35,12 @@ exports.createProject = async (data) => {
 };
 
 
-// Consultar todos los proyectos
-exports.getAllProjects = async () => {
+// Consultar los proyectos de un administrador
+exports.getAllProjectsByAdministradorId = async (administrador_id) => {
     try {
-        const projects = await project.findAll();
+        const projects = await project.findAll({
+            where: { administrador_id }
+        });
 
         return projects;
 

@@ -23,10 +23,11 @@ exports.createProject = async (req, res) => {
 };
 
 
-// Consultar todos los proyectos
-exports.getAllProjects = async (req, res) => {
+// Consultar los proyectos del administrador autenticado
+exports.getAllProjectsByAdministradorId = async (req, res) => {
     try {
-        const projects = await projectService.getAllProjects();
+        const administrador_id = req.user.id;
+        const projects = await projectService.getAllProjectsByAdministradorId(administrador_id);
 
         res.status(200).json({
             message: 'Proyectos consultados con éxito',
@@ -39,10 +40,10 @@ exports.getAllProjects = async (req, res) => {
 };
 
 
-// Consultar proyectos de un usuario
-exports.getProjectByuserId = async (req, res) => {
+// Consultar proyectos asociados al usuario autenticado
+exports.getAllProjectsByUserId = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user.id;
 
         const projects = await projectService.getProjectByuserId(userId);
 
@@ -79,9 +80,10 @@ exports.assignUserToProject = async (req, res) => {
 
 
 // Retirar usuario de un proyecto
-exports.removeUserFromProject = async (req, res) => {
+exports.disassociateProjectFromUser = async (req, res) => {
     try {
-        const { usuario_id, proyecto_id } = req.body;
+        const usuario_id = req.user.id;
+        const proyecto_id = req.params.id;
 
         const result = await projectService.removeUserFromProject({
             usuario_id,
